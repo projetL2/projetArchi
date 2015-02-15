@@ -199,7 +199,20 @@ void do_move (grid g, dir d) {
 
 void add_tile (grid g) {
 
-    rand()%GRID_SIDE;
+	int numberRand = rand()%10;
+	
+	int xrand = rand()%GRID_SIDE;
+	int yrand = rand()%GRID_SIDE;
+
+	while(g->grid[xrand][yrand]!=0) {
+		xrand = rand()%GRID_SIDE;
+		yrand = rand()%GRID_SIDE;
+	}
+
+	if(numberRand == 9)
+		set_tile(g,xrand,yrand,4);
+	else
+		set_tile(g,xrand,yrand,2);
 }
 
 void play (grid g, dir d) {
