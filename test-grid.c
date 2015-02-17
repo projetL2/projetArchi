@@ -35,9 +35,23 @@ int main (void) {
 			// cette ligne permet d'initiliser la fonction time (de la bibliotheque time.h) 
     
     afficher(g);
-    
+    add_tile(g);
+	afficher(g);
     for(int i = 0; i<10; i++) { // creation d'une boucle pour tester add_tile 
-		add_tile(g); 
+		 		
+		int dirRand= rand()%3; // valariable pour choisir la direction de facon aléatoire
+		switch (dirRand){
+			case 0:
+				do_move(g,LEFT);
+			break;
+			case 1:
+				do_move (g,RIGHT);
+			break;
+			case 2:
+				do_move (g,DOWN);
+			break;
+		}
+		add_tile(g);
 		afficher(g);
 	}
 
