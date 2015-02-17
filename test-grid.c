@@ -5,20 +5,19 @@
 #include <time.h>
 
 //fonction pour tester notre grille et son affichage
-//i représente les colonnes et j les lignes (commentaire à corriger)
 
 void afficher (grid g) {
 
     printf (" +~~~~+~~~~+~~~~+~~~~+ \n ");
 
-    for (int i=0; i<GRID_SIDE; ++i) {
+    for (int colonne=0; colonne<GRID_SIDE; ++colonne) {
         printf("|");
-        for (int j=0; j<GRID_SIDE; ++j) {
-            tile res = (get_tile (g,j,i));
+        for (int ligne=0; ligne<GRID_SIDE; ++ligne) {
+            tile res = (get_tile (g,colonne,ligne));
             if (res == 0)
-                printf ("    |");
+                printf ("    |"); // on affiche pas 0 pour plus de lisibilité.
             else
-                printf ("%4d|",res);
+                printf ("%4d|",res); //on reserve la place de 4chiffres quel que soit le nombre réel de 						// la tile. 
         }
         printf ("\n +~~~~+~~~~+~~~~+~~~~+ \n ");
     }
@@ -29,15 +28,16 @@ void afficher (grid g) {
 
 int main (void) {
 
-    grid g = new_grid ();
+    grid g = new_grid (); //creation d'une nouvelle grille
 
 
-    srand(time (NULL)); // initialisation de rand
+    srand(time (NULL)); // srand est une fonction de la bibliothéque stdlib.h.
+			// cette ligne permet d'initiliser la fonction time (de la bibliotheque time.h) 
     
     afficher(g);
     
-    for(int i = 0; i<10; i++) {
-		add_tile(g);
+    for(int i = 0; i<10; i++) { // creation d'une boucle pour tester add_tile 
+		add_tile(g); 
 		afficher(g);
 	}
 

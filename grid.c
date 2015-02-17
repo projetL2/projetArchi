@@ -2,10 +2,10 @@
 #include "grid.h"
 #include <stdlib.h>
 #include <assert.h>
-#include <time.h>
+
 
 // La structure de la grille, un pointeur de pointeur qui nous donnera la matrice
-// et une unsigned long int score
+// et un unsigned long int score
 struct grid_s {
     unsigned long int score;
     tile** grid;
@@ -80,8 +80,8 @@ bool can_move (grid g, dir d) {
     switch (d) {
 
     case LEFT:
-        for (int i=1; i<GRID_SIDE; ++i)  //i represente les colones
-            for (int j=0; j<GRID_SIDE; ++j) //j represente les lignes
+        for (int i=1; i<GRID_SIDE; ++i)  
+            for (int j=0; j<GRID_SIDE; ++j) 
                 if ( (g->grid[i-1][j] == 0) || (g->grid[i][j] == g->grid[i-1][j]) ) // si case suivante vide ou fusion possible
                     return true;
         break;
@@ -114,10 +114,8 @@ bool can_move (grid g, dir d) {
 //Fonction booléenne qui renvoie TRUE si aucun mouvement n'est plus possible.
 bool game_over(grid g) {
 
-    if ( !can_move(g,UP) &&
-            !can_move(g,DOWN) &&
-            !can_move(g,LEFT) &&
-            !can_move(g,RIGHT))
+    if ( !can_move(g,UP) && !can_move(g,DOWN) &&
+		!can_move(g,LEFT) && !can_move(g,RIGHT))
         return true;
 
     else
@@ -153,16 +151,16 @@ void do_move (grid g, dir d) {
         case RIGHT:
             for (int ligne=0; ligne<GRID_SIDE; ++ligne) {// on parcourt de droite à gauche
                 for (int colonne = GRID_SIDE-2; colonne>=0; --colonne) { // et haut en bas
-                    if (g->grid[colonne][ligne] != 0 && colonne < 3) { // si la case n'est pas vide
-                        if (g->grid[colonne+1][ligne] == 0) {  // si la case de droite est vide, on décale la case actuelle
+                    if (g->grid[colonne][ligne] != 0 && colonne < 3) { 
+                        if (g->grid[colonne+1][ligne] == 0) {  
                             g->grid[colonne+1][ligne] = g->grid[colonne][ligne];
                             g->grid[colonne][ligne] = 0;
-                            colonne+=2; // on incrémente i au cas où il y ait à déplacer la tile plusieurs fois
+                            colonne+=2; 
                         }
-                        else if (g->grid[colonne][ligne] == g->grid[colonne+1][ligne]) { // s' il doit y avoir une fusion
+                        else if (g->grid[colonne][ligne] == g->grid[colonne+1][ligne]) { 
                             g->grid[colonne][ligne] = 0;
-                            g->grid[colonne+1][ligne] *= 2;			// on vide la case actuelle et on double la valeur de celle qu'elle a heurté
-                            g->score += g->grid[colonne+1][ligne];		// on actualise le score
+                            g->grid[colonne+1][ligne] *= 2;			
+                            g->score += g->grid[colonne+1][ligne];		
                         }
                     }
                 }
@@ -172,11 +170,11 @@ void do_move (grid g, dir d) {
         case DOWN:
             for (int colonne=0; colonne<GRID_SIDE; ++colonne) // on parcourt de gauche à droite
                 for (int ligne = GRID_SIDE-2; ligne>=0; --ligne) // de bas en haut
-                    if (g->grid[colonne][ligne] != 0 && ligne < 3) {		// si la case n'est pas vide
-                        if (g->grid[colonne][ligne+1] == 0) {		// si la case en dessous d'elle est vide, on décale
+                    if (g->grid[colonne][ligne] != 0 && ligne < 3) {		
+                        if (g->grid[colonne][ligne+1] == 0) {		
                             g->grid[colonne][ligne+1] = g->grid[colonne][ligne];
                             g->grid[colonne][ligne] = 0;
-                            ligne+=2; // on incrémente les lignes au cas ou on doive déplacer plusieurs fois la tile
+                            ligne+=2; 
                         }
                         else if (g->grid[colonne][ligne+1] == g->grid[colonne][ligne]) {
                             g->grid[colonne][ligne] = 0;
@@ -185,8 +183,8 @@ void do_move (grid g, dir d) {
                         }
                     }
             break;
-            /*
-                  case DOWN:
+            /* ATTENTION utilisé ligne et colonne (pas i et j)
+                  case UP:
                       for (int i=0; i<GRID_SIDE; ++i)
                           for (int j=0; j<GRID_SIDE-1; ++j)
                               if ( (g->grid[i][j+1] == 0) || (g->grid[i][j+1] == g->grid[i][j]) ) // si case suivante vide ou fusion possible
@@ -196,29 +194,32 @@ void do_move (grid g, dir d) {
         }
     }
 }
-
+// fonction qui ajoute une tile de fonction aléatoire dans une case vide de la grid
 void add_tile (grid g) {
+// il faut creer une structure avec une liste des cases vide et faire le random sur cette liste
+// peut etre avec un tableau de int avec le 1er chiffre la colonne et  2 eme chiffre la colonne
 
-	int numberRand = rand()%10;
+	int numberRand = rand()%10; //entier aléatoire entre 0 et 10
 	
-	int xrand = rand()%GRID_SIDE;
-	int yrand = rand()%GRID_SIDE;
+	int colonneRand = rand()%GRID_SIDE;// choix d'une colonne aléatoirement
+	int ligneRand = rand()%GRID_SIDE; // choix d'une ligne aléatoirement
 
-	while(g->grid[xrand][yrand]!=0) {
-		xrand = rand()%GRID_SIDE;
-		yrand = rand()%GRID_SIDE;
+	while(g->grid[colonneRand][ligneRand]!=0) { // si la case est occupé on refait des random jusqu'a en trouver une vide.
+		colonneRand = rand()%GRID_SIDE;
+		ligneRand = rand()%GRID_SIDE;
 	}
 
-	if(numberRand == 9)
-		set_tile(g,xrand,yrand,4);
+	if(numberRand == 9)// 4 doit avoir une chance sur 10 d'etre choix, on a prit le chiffre 9 de façon arbitraire, fallait choisir un chiffre!
+		set_tile(g,colonneRand,ligneRand,4);
 	else
-		set_tile(g,xrand,yrand,2);
+		set_tile(g,colonneRand,ligneRand,2);
 }
 
+// fonction qui doit récuperer les instruction du joueur 
 void play (grid g, dir d) {
 
-    if(can_move(g,d)) {
-        do_move(g,d);
-        add_tile;
+    if(can_move(g,d)) { // si on peut jouer
+        do_move(g,d);  // on joue: on effectue le deplacement
+        add_tile(g);    // on ajoute une tile
     }
 }
