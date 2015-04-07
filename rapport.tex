@@ -36,8 +36,50 @@ pour ne pas avoir d'erreur lors de la compilation, vu que maintenant I-ALU et I-
 \subsection*{Partie bonus:}
 
 \section*{Exercice 2:}
-\subsection*{Version squentielle:}
+On cherche à creer un pas à pas dans le fonctionnement du processeur.
+\subsection*{Version séquentielle:}
+Dans le fichier seq-std.hcl, ligne 92, nous avons ajouté une instruction pour préciser pour quelle valeurs le processeur passera à l'instruction suivante.
+\begin{lstlisting}[frame=single]
+int instr-next-ifun=[
+	1:-1;
+	];
+\end{lstlisting} 
+Dans le fichier ssim.c à la ligne 375, nous avons ajouter le prototype de la fonction "gen-instr-next-ifun" qui "lit" le compteur d'instructions. On ajoute cette fonction à la ligne 667.
+\begin{lstlisting}[frame=single]
+if(gen_instr_next_ifun () != -1)
+	ifun = gen_instr_next_ifun();
+else
+\end{lstlisting} 
+Enfin à la ligne 1388, on ajoute l'instruction:
+\begin{lstlisting}[frame=single]
+if (gen_instr_next_ifun() == -1){
+	pc_next->pc=gen_new_F_predPC();
+	}
+\end{lstlisting} 
+Elle permet de calculer la nouvelle valeur du compteur ordinal.
 \subsection*{version pipe-linée:}
+Les modifications sont quasiment similaire à la version séquentielle.
+Dans le fichier pipe-std.hcl, ligne 138, nous avons ajouté une instruction pour préciser pour quelle valeurs le processeur passera à l'instruction suivante.
+\begin{lstlisting}[frame=single]
+int instr-next-ifun=[
+	1:-1;
+	];
+\end{lstlisting} 
+Dans le fichier psim.c à la ligne 1327, nous avons ajouter le prototype de la fonction "gen-instr-next-ifun" qui "lit" le compteur d'instructions. On ajoute cette fonction à la ligne 1361.
+\begin{lstlisting}[frame=single]
+if(gen_instr_next_ifun () != -1)
+	ifun = gen_instr_next_ifun();
+	fetch_ok= TRUE;
+else
+	fetch_ok=get_byte_val(mem,valp, &instr);
+\end{lstlisting} 
+Enfin à la ligne 772, on ajoute l'instruction:
+\begin{lstlisting}[frame=single]
+if (gen_instr_next_ifun() == -1){
+	pc_in = gen_new_pc();
+	}
+\end{lstlisting} 
+Elle permet de calculer la nouvelle valeur du compteur ordinal.
 
 \section*{Exercice 3:}
 \subsection*{Question 1:}
