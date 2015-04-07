@@ -371,6 +371,9 @@ int gen_pc();  /* SEQ+ */
 int gen_need_regids();
 int gen_need_valC();
 int gen_instr_valid();
+
+int gen_instr_next_ifun();
+
 int gen_srcA();
 int gen_srcB();
 int gen_dstE();
@@ -661,6 +664,11 @@ static exc_t sim_step()
 	pc = gen_pc();
     }
     valp = pc;
+    if(gen_instr_next_ifun () != -1){
+	ifun = gen_instr_next_ifun();
+    }
+    else
+
     if (get_byte_val(mem, valp, &instr)) {
 	icode = HI4(instr);
 	ifun = LO4(instr);
@@ -761,7 +769,9 @@ static exc_t sim_step()
 	prev_bcond_in = bcond;
     } else {
 	/* Update PC */
-	pc_in = gen_new_pc();
+	if (gen_instr_next_ifun() == -1){
+		pc_in = gen_new_pc();
+	}
     } 
     sim_report();
     return status;
