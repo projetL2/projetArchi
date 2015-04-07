@@ -11,7 +11,6 @@
 
 \begin{document}
 \lstset{language=C}
-
 \title{Compte-rendu final du projet \\Architecture des ordinateurs}
 \author{Guillaume ALMYRE 
 \and
@@ -23,6 +22,15 @@ Chrystelle PETUREAU}
 
 \section*{Exercice 1:}
 \subsection*{Question 1:}
+On nous demande de faire en sorte que toutes les opérations de type "iXX" soit confondu avec leur consoeurs. Pour cela, nous avons renommer l'identifiant de l'opérateur I-ALUI en I-FREE1 et en précisant que I-ALU est la même chose que I-ALUI avec la ligne(isa.h, ligne 29 et 33):
+\begin{lstlisting}[frame=single]
+#define I_ALUI I_ALU
+\end{lstlisting}
+De ce fait dans isa.c, on commente la partie (isa.c de la ligne 925 à la ligne 951)
+\begin{lstlisting}[frame=single]
+case I_ALUI:
+\end{lstlisting}
+pour ne pas avoir d'erreur lors de la compilation, vu que maintenant I-ALU et I-ALU sont confondu.
 \subsection*{Question 2:}
 \subsection*{Question 1:}
 \subsection*{Partie bonus:}
