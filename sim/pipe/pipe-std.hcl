@@ -137,7 +137,7 @@ bool instr_valid = f_icode in
 
 int instr_next_ifun = [	
 	1 : -1;
-]
+];
 
 # Predict next value of PC
 int new_F_predPC = [
@@ -201,8 +201,10 @@ int new_E_valB = [
 
 ## Select input A to ALU
 int aluA = [
-	E_icode in { RRMOVL, OPL } : E_valA;
-	E_icode in { IRMOVL, RMMOVL, MRMOVL, IOPL } : E_valC;
+	E_icode in {OPL} && D_rA == RNONE : E_valC;
+	E_icode in {OPL} : E_valA;
+	E_icode in { RRMOVL} : E_valA;
+	E_icode in { IRMOVL, RMMOVL, MRMOVL} : E_valC;
 	E_icode in { CALL, PUSHL } : -4;
 	E_icode in { RET, POPL } : 4;
 	# Other instructions don't need ALU

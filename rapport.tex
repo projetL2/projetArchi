@@ -84,7 +84,7 @@ int instr-next-ifun=[
 Dans le fichier psim.c à la ligne 1327, nous avons ajouter le prototype de la fonction "gen-instr-next-ifun" qui "lit" le compteur d'instructions. On ajoute cette fonction à la ligne 1361.
 \begin{lstlisting}[frame=single]
 if(gen_instr_next_ifun () != -1)
-	ifun = gen_instr_next_ifun();
+	if_id_next->ifun = gen_instr_next_ifun();
 	fetch_ok= TRUE;
 else
 	fetch_ok=get_byte_val(mem,valp, &instr);

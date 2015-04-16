@@ -1358,15 +1358,17 @@ void do_if_stage()
     /* Ready to fetch instruction.  Speculatively fetch register byte
        and immediate word
     */
-    if(gen_instr_next_ifun () != -1)
-	ifun = gen_instr_next_ifun();
+    if(gen_instr_next_ifun () != -1){
+	if_id_next->ifun = gen_instr_next_ifun();
 	fetch_ok = TRUE;
+    }
     else
     	fetch_ok = get_byte_val(mem, valp, &instr);
-    if (fetch_ok) {
+    if (fetch_ok){
 	if_id_next->icode = GET_ICODE(instr);
 	if_id_next->ifun = GET_FUN(instr);
-    } else {
+    }
+    else {
 	if_id_next->icode = I_NOP;
 	if_id_next->ifun = 0;
 	nstatus = EXC_ADDR;

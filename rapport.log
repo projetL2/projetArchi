@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2015.1.23)  16 APR 2015 12:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2015.1.23)  16 APR 2015 17:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -342,10 +342,10 @@ Package rerunfilecheck Info: File `rapport.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 110.
  ) 
 Here is how much of TeX's memory you used:
- 8174 strings out of 493105
- 116542 string characters out of 6137072
+ 8176 strings out of 493105
+ 116572 string characters out of 6137072
  233534 words of memory out of 5000000
- 11518 multiletter control sequences out of 15000+600000
+ 11520 multiletter control sequences out of 15000+600000
  11766 words of font info for 30 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  29i,6n,49p,347b,1133s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -356,7 +356,7 @@ r/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr
 /share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/t
 ype1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super
 /sfrm1728.pfb>
-Output written on rapport.pdf (4 pages, 107421 bytes).
+Output written on rapport.pdf (4 pages, 107466 bytes).
 PDF statistics:
  124 PDF objects out of 1000 (max. 8388607)
  109 compressed objects within 2 object streams

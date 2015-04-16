@@ -1,0 +1,14 @@
+	.pos 0
+	irmovl 5,%eax
+	nop
+	irmovl 5,%ebx
+	nop
+	iaddl 5,%eax
+	nop
+	iaddl 5,%ebx
+	nop
+	nop
+	nop
+	nop
+	addl %ebx,%eax
+	halt
