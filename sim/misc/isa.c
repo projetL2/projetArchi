@@ -922,8 +922,8 @@ exc_t step_state(state_ptr s, FILE *error_file)
 	set_reg_val(s->r, REG_EBP, val);
 	s->pc = ftpc;
 	break;
-    case I_ALUI:
-	/*if (!ok1) {
+    /*case I_ALUI:
+	if (!ok1) {
 	    if (error_file)
 		fprintf(error_file,
 			"PC = 0x%x, Invalid instruction address\n", s->pc);

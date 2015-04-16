@@ -1,0 +1,7 @@
+  0x000:              | 	.pos 0
+  0x000: 308005000000 | 	irmovl 5,%eax
+  0x006: 308305000000 | 	irmovl 5,%ebx
+  0x00c: 608005000000 | 	iaddl 5,%eax
+  0x012: 608305000000 | 	iaddl 5,%ebx
+  0x018: 6030         | 	addl %ebx,%eax
+  0x01a: 10           | 	halt

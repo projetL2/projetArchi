@@ -1,6 +1,6 @@
 \documentclass{report}
 
-\usepackage[utf8]{inputenc}
+\usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
 \usepackage{setspace}
@@ -12,9 +12,7 @@
 \begin{document}
 \lstset{language=C}
 \title{Compte-rendu final du projet \\Architecture des ordinateurs}
-\author{Guillaume ALMYRE 
-\and
-Gaëtan CHAMBRES
+\author{Gaëtan CHAMBRES
 \and
 Chrystelle PETUREAU}
 \date{10/05/2015}
@@ -22,7 +20,7 @@ Chrystelle PETUREAU}
 
 \section*{Exercice 1:}
 \subsection*{Question 1:}
-On nous demande de faire en sorte que toutes les opérations de type "iXX" soit confondu avec leur consoeurs. Pour cela, nous avons renommer l'identifiant de l'opérateur I-ALUI en I-FREE1 et en précisant que I-ALU est la même chose que I-ALUI avec la ligne(isa.h, ligne 29 et 33):
+On nous demande de faire en sorte que toutes les opérations de type "iXX" soit confondu avec leur consoeurs. Pour cela, nous avons renommer l'identifiant de l'opérateur I-ALUI en I-FREE1 et en précisant qu'on défini maintenant I-ALUI comme la même chose que I-ALU avec la ligne(isa.h, ligne 29 et 33):
 \begin{lstlisting}[frame=single]
 #define I_ALUI I_ALU
 \end{lstlisting}
@@ -30,15 +28,32 @@ De ce fait dans isa.c, on commente la partie (isa.c de la ligne 925 à la ligne 9
 \begin{lstlisting}[frame=single]
 case I_ALUI:
 \end{lstlisting}
-pour ne pas avoir d'erreur lors de la compilation, vu que maintenant I-ALU et I-ALU sont confondu.
+pour ne pas avoir d'erreur lors de la compilation, vu que maintenant I-ALU et I-ALUI sont confondu.
 \subsection*{Question 2:}
-\subsection*{Question 1:}
+Pour permettre l'utilisation de I-OPL et OPL, voici les modifications apportées dans les fichiers HCL:\\
+Pour l'architecture seq, dans le ficher seq-std.hcl, aux lignes 129 et 130, nous avons ajouté ces deux lignes, qui permettent de vérifier avant l'étage EXECUTE si le registre srcA de l'opération OPL vaut rA ou RNONE. Si le registre vaut RNONE, alors on lit la valeur de la constante valC, sinon on lit valA, le contenu de rA.
+\begin{lstlisting}[frame=single]
+icode in {OPL} && rA == RNONE : valC;
+icode in { OPL } : valA;
+\end{lstlisting}
+
+Nous avons alors testé,après recompilation, avec le code suivant:
+\begin{lstlisting}[frame=single]
+	.pos 0
+	irmovl 5,%eax
+	irmovl 5,%ebx
+	iaddl 5,%eax
+	iaddl 5,%ebx
+	addl %ebx,%eax
+	halt
+\end{lstlisting}
+\subsection*{Question 3:}
 \subsection*{Partie bonus:}
 
 \section*{Exercice 2:}
-On cherche à creer un pas à pas dans le fonctionnement du processeur.
+On cherche à créer un pas à pas dans le fonctionnement du processeur.
 \subsection*{Version séquentielle:}
-Dans le fichier seq-std.hcl, ligne 92, nous avons ajouté une instruction pour préciser pour quelle valeurs le processeur passera à l'instruction suivante.
+Dans le fichier seq-std.hcl, ligne 92, nous avons ajouté une instruction pour préciser pour quelles valeurs le processeur passera à l'instruction suivante.
 \begin{lstlisting}[frame=single]
 int instr-next-ifun=[
 	1:-1;
@@ -50,16 +65,17 @@ if(gen_instr_next_ifun () != -1)
 	ifun = gen_instr_next_ifun();
 else
 \end{lstlisting} 
-Enfin à la ligne 1388, on ajoute l'instruction:
+
+Enfin à la ligne 772, on ajoute l'instruction:
 \begin{lstlisting}[frame=single]
 if (gen_instr_next_ifun() == -1){
-	pc_next->pc=gen_new_F_predPC();
-	}
+	pc_in = gen_new_pc();
+}
 \end{lstlisting} 
 Elle permet de calculer la nouvelle valeur du compteur ordinal.
 \subsection*{version pipe-linée:}
 Les modifications sont quasiment similaire à la version séquentielle.
-Dans le fichier pipe-std.hcl, ligne 138, nous avons ajouté une instruction pour préciser pour quelle valeurs le processeur passera à l'instruction suivante.
+Dans le fichier pipe-std.hcl, ligne 138, nous avons ajouté une instruction pour préciser pour quelles valeurs le processeur passera à l'instruction suivante.
 \begin{lstlisting}[frame=single]
 int instr-next-ifun=[
 	1:-1;
@@ -73,11 +89,12 @@ if(gen_instr_next_ifun () != -1)
 else
 	fetch_ok=get_byte_val(mem,valp, &instr);
 \end{lstlisting} 
-Enfin à la ligne 772, on ajoute l'instruction:
+
+Enfin à la ligne 1388, on ajoute l'instruction:
 \begin{lstlisting}[frame=single]
 if (gen_instr_next_ifun() == -1){
-	pc_in = gen_new_pc();
-	}
+	pc_next->pc=gen_new_F_predPC();
+}
 \end{lstlisting} 
 Elle permet de calculer la nouvelle valeur du compteur ordinal.
 
