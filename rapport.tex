@@ -30,6 +30,7 @@ case I_ALUI:
 \end{lstlisting}
 pour ne pas avoir d'erreur lors de la compilation, vu que maintenant I-ALU et I-ALUI sont confondu.
 \subsection*{Question 2:}
+\subsection*{Version séquentielle}
 Pour permettre l'utilisation de I-OPL et OPL, voici les modifications apportées dans les fichiers HCL:\\
 Pour l'architecture seq, dans le ficher seq-std.hcl, aux lignes 129 et 130, nous avons ajouté ces deux lignes, qui permettent de vérifier avant l'étage EXECUTE si le registre srcA de l'opération OPL vaut rA ou RNONE. Si le registre vaut RNONE, alors on lit la valeur de la constante valC, sinon on lit valA, le contenu de rA.
 \begin{lstlisting}[frame=single]
@@ -39,14 +40,90 @@ icode in { OPL } : valA;
 
 Nous avons alors testé,après recompilation, avec le code suivant:
 \begin{lstlisting}[frame=single]
+
 	.pos 0
+	
 	irmovl 5,%eax
 	irmovl 5,%ebx
 	iaddl 5,%eax
 	iaddl 5,%ebx
 	addl %ebx,%eax
+	
+	halt
+	
+\end{lstlisting}
+Et nous avons obtenu le résultat suivant:
+\begin{figure}[!h]
+\caption{Etape 1}
+\centering
+\includegraphics[scale=0.2]{resultat_de_test/ex1_testOPL_seq/etape1.png}
+\end{figure}
+\begin{figure}[!h]
+\caption{Etape 2 et 3}
+\centering
+\includegraphics[scale=0.2]{resultat_de_test/ex1_testOPL_seq/etape2-3.png}
+\end{figure}
+\begin{figure}[!h]
+\caption{Etape 4 et 5}
+\centering
+\includegraphics[scale=0.2]{resultat_de_test/ex1_testOPL_seq/etape4-5.png}
+\end{figure}
+\begin{figure}[!h]
+\caption{Etape 6}
+\centering
+\includegraphics[scale=0.2]{resultat_de_test/ex1_testOPL_seq/etape6.png}
+\end{figure}
+ \\
+  \\
+   \\
+    \\
+\subsection*{Version pipelinée}
+Pour l'architecture pipelinée, nous avons ajouté les lignes suivantes (pipe-std.hcl, ligne 204), qui devrait permettre de faire la même vérification que pour la version séquentielle détaillée ci-dessus.
+\begin{lstlisting}[frame=single]
+
+E_icode in {OPL} && D_rA == RNONE : E_valC;
+	E_icode in {OPL} : E_valA;
+	
+\end{lstlisting}
+Mais lorsque nous testons le processeur avec le code suivant, qui est une version adaptée au pipeline du test utilisé précédemment:
+\begin{lstlisting}[frame=single]
+	.pos 0
+	irmovl 5,%eax
+	nop
+	irmovl 5,%ebx
+	nop
+	iaddl 5,%eax
+	nop
+	iaddl 5,%ebx
+	nop
+	nop
+	nop
+	nop
+	addl %ebx,%eax
 	halt
 \end{lstlisting}
+les résultats ne sont pas corrects. Le surnombre d'opérateurs NOPE nous permet d'être sur que le problème ne vient pas de bulles manquantes. L'erreur se présente au moment de l'opération "addl" pour laquelle le processeur lit le contenu des deux registres, mais aussi une constante valC égale à 16 (en décimal). Puis à l'exécution, le processeur ajoute au registre B le contenu de cette constante plutôt que celui du registre A.\\
+Nous n'avons pas su localiser ce problème et donc le résoudre, cependant voici nos résultats:
+ \\
+  \\
+   \\
+    \\
+\begin{figure}[!h]
+\caption{Etape 1}
+\centering
+\includegraphics[scale=0.2]{resultat_de_test/ex1_testOPL_pipe/Etape1.png}
+\end{figure}
+\begin{figure}[!h]
+\caption{Etape 2}
+\centering
+\includegraphics[scale=0.2]{resultat_de_test/ex1_testOPL_pipe/Etape2.png}
+\end{figure}
+\begin{figure}[!h]
+\caption{Etape 3 - erreur dans le résultat}
+\centering
+\includegraphics[scale=0.2]{resultat_de_test/ex1_testOPL_pipe/Etape3.png}
+\end{figure}
+
 \subsection*{Question 3:}
 \subsection*{Partie bonus:}
 

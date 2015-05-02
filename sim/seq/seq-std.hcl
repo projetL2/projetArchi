@@ -128,8 +128,8 @@ int dstM = [
 int aluA = [
 	icode in {OPL} && rA == RNONE : valC;
 	icode in { OPL } : valA;
-	icode in { RRMOVL } : valA;
-	icode in { IRMOVL, RMMOVL, MRMOVL, IOPL } : valC;
+	icode in { RRMOVL } : valA; 
+	icode in {IRMOVL, RMMOVL, MRMOVL, IOPL } : valC;
 	icode in { CALL, PUSHL } : -4;
 	icode in { RET, POPL } : 4;
 	# Other instructions don't need ALU
