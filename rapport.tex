@@ -1,43 +1,47 @@
 \documentclass{report}
 
-\usepackage[latin1]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
 \usepackage{setspace}
 \usepackage{listings} 
 \usepackage{hyperref}
+\usepackage{amssymb}
 \usepackage{graphicx}
-
 
 \begin{document}
 \lstset{language=C}
-\title{Compte-rendu final du projet \\Architecture des ordinateurs}
+\title{Compte-rendu du projet \\Architecture des ordinateurs}
 \author{Gaëtan CHAMBRES
 \and
 Chrystelle PETUREAU}
-\date{10/05/2015}
+\date{05/05/2015}
+
 \maketitle
 
-\section*{Exercice 1:}
-\subsection*{Question 1:}
-On nous demande de faire en sorte que toutes les opérations de type "iXX" soit confondu avec leur consoeurs. Pour cela, nous avons renommer l'identifiant de l'opérateur I-ALUI en I-FREE1 et en précisant qu'on défini maintenant I-ALUI comme la même chose que I-ALU avec la ligne(isa.h, ligne 29 et 33):
+\tableofcontents
+
+\chapter{Exercice 1:De la place dans les opcodes}
+\section{Question 1:Libérer I-ALU}
+Le but de cette question est de faire en sorte que toutes les opérations de type "iXX" soit confondu avec leur consoeurs de même type. Pour cela, nous avons renommer l'identifiant de l'opérateur I-ALUI en I-FREE1. On définit maintenant I-ALUI comme la même opération que I-ALU avec la ligne de commande suivante ( fichier: isa.h, lignes 29 et 33):
 \begin{lstlisting}[frame=single]
 #define I_ALUI I_ALU
 \end{lstlisting}
-De ce fait dans isa.c, on commente la partie (isa.c de la ligne 925 à la ligne 951)
+De ce fait dans le fichier isa.c, on commente la partie du case: (fichier: isa.c de la ligne 925 à la ligne 951)
 \begin{lstlisting}[frame=single]
 case I_ALUI:
 \end{lstlisting}
-pour ne pas avoir d'erreur lors de la compilation, vu que maintenant I-ALU et I-ALUI sont confondu.
-\subsection*{Question 2:}
-\subsection*{Version séquentielle}
-Pour permettre l'utilisation de I-OPL et OPL, voici les modifications apportées dans les fichiers HCL:\\
-Pour l'architecture seq, dans le ficher seq-std.hcl, aux lignes 129 et 130, nous avons ajouté ces deux lignes, qui permettent de vérifier avant l'étage EXECUTE si le registre srcA de l'opération OPL vaut rA ou RNONE. Si le registre vaut RNONE, alors on lit la valeur de la constante valC, sinon on lit valA, le contenu de rA.
+pour ne pas avoir d'erreur lors de la compilation, vu que les opérateurs I-ALU et I-ALUI sont, maintenant, confondu.
+\section{Question 2:Distinguer IOPL et OPL}
+\subsection{Version séquentielle}
+Pour permettre l'utilisation distingue de I-OPL et OPL, nous avons éffectué les modifications suivantes dans les fichiers HCL:\\
+Pour l'architecture seq, dans le ficher seq-std.hcl, aux lignes 129 et 130, nous avons ajouté ces deux lignes.
 \begin{lstlisting}[frame=single]
 icode in {OPL} && rA == RNONE : valC;
 icode in { OPL } : valA;
 \end{lstlisting}
 
+Elles permettent de vérifier avant l'étage EXECUTE si le registre srcA de l'opération OPL vaut rA ou RNONE. Si le registre vaut RNONE, alors on lit la valeur de la constante valC, sinon on lit valA, le contenu de rA.\\
 Nous avons alors testé,après recompilation, avec le code suivant:
 \begin{lstlisting}[frame=single]
 
@@ -53,31 +57,31 @@ Nous avons alors testé,après recompilation, avec le code suivant:
 	
 \end{lstlisting}
 Et nous avons obtenu le résultat suivant:
-\begin{figure}[!h]
+\begin{figure}[hbtp]
 \caption{Etape 1}
 \centering
-\includegraphics[scale=0.2]{resultat_de_test/ex1_testOPL_seq/etape1.png}
+\includegraphics[scale=0.2]{résultat_de_test/ex1_testOPL_seq/etape1.png}
 \end{figure}
-\begin{figure}[!h]
+\begin{figure}[hbtp]
 \caption{Etape 2 et 3}
 \centering
-\includegraphics[scale=0.2]{resultat_de_test/ex1_testOPL_seq/etape2-3.png}
+\includegraphics[scale=0.2]{résultat_de_test/ex1_testOPL_seq/etape2-3.png}
 \end{figure}
-\begin{figure}[!h]
+\begin{figure}[hbtp]
 \caption{Etape 4 et 5}
 \centering
-\includegraphics[scale=0.2]{resultat_de_test/ex1_testOPL_seq/etape4-5.png}
+\includegraphics[scale=0.2]{résultat_de_test/ex1_testOPL_seq/etape4-5.png}
 \end{figure}
 \begin{figure}[!h]
 \caption{Etape 6}
 \centering
-\includegraphics[scale=0.2]{resultat_de_test/ex1_testOPL_seq/etape6.png}
+\includegraphics[scale=0.2]{résultat_de_test/ex1_testOPL_seq/etape6.png}
 \end{figure}
  \\
   \\
    \\
     \\
-\subsection*{Version pipelinée}
+\subsection{Version pipeline}
 Pour l'architecture pipelinée, nous avons ajouté les lignes suivantes (pipe-std.hcl, ligne 204), qui devrait permettre de faire la même vérification que pour la version séquentielle détaillée ci-dessus.
 \begin{lstlisting}[frame=single]
 
@@ -124,12 +128,12 @@ Nous n'avons pas su localiser ce problème et donc le résoudre, cependant voici n
 \includegraphics[scale=0.2]{resultat_de_test/ex1_testOPL_pipe/Etape3.png}
 \end{figure}
 
-\subsection*{Question 3:}
-\subsection*{Partie bonus:}
+\section{Question 3:}
+\section{Partie bonus:}
 
-\section*{Exercice 2:}
+\chapter{Exercice 2:}
 On cherche à créer un pas à pas dans le fonctionnement du processeur.
-\subsection*{Version séquentielle:}
+\section{Version séquentielle:}
 Dans le fichier seq-std.hcl, ligne 92, nous avons ajouté une instruction pour préciser pour quelles valeurs le processeur passera à l'instruction suivante.
 \begin{lstlisting}[frame=single]
 int instr-next-ifun=[
@@ -150,7 +154,7 @@ if (gen_instr_next_ifun() == -1){
 }
 \end{lstlisting} 
 Elle permet de calculer la nouvelle valeur du compteur ordinal.
-\subsection*{version pipe-linée:}
+\section{version pipe-line:}
 Les modifications sont quasiment similaire à la version séquentielle.
 Dans le fichier pipe-std.hcl, ligne 138, nous avons ajouté une instruction pour préciser pour quelles valeurs le processeur passera à l'instruction suivante.
 \begin{lstlisting}[frame=single]
@@ -175,13 +179,13 @@ if (gen_instr_next_ifun() == -1){
 \end{lstlisting} 
 Elle permet de calculer la nouvelle valeur du compteur ordinal.
 
-\section*{Exercice 3:}
-\subsection*{Question 1:}
-\subsection*{Question 2:}
-\subsection*{Instruction mul:}
-\subsection*{Instructions lods/stos/movs:}
-\subsection*{Instruction repstos:}
-\subsection*{Question 3:}
-\subsection*{Question 4:}
+\chapter{Exercice 3:}
+\section{Question 1:}
+\section{Question 2:}
+\subsection{Instruction mul:}
+\subsection{Instructions lods/stos/movs:}
+\subsection{Instruction repstos:}
+\section{Question 3:}
+\section{Question 4:}
 
 \end{document}
